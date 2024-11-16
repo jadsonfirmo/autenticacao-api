@@ -1,0 +1,119 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"version": "1.0.0",
+		"title": "Minha API de Autenticação",
+		"description": "Documentação da API para autenticação e gerenciamento de usuários"
+	},
+	"host": "localhost:3000",
+	"basePath": "/api",
+	"schemes": ["http"],
+	"paths": {
+		"/login": {
+			"post": {
+				"tags": ["Autenticação"],
+				"summary": "Realiza o login",
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "Credenciais do usuário",
+						"required": true,
+						"schema": {
+							"type": "object",
+							"properties": {
+								"email": { "type": "string" },
+								"password": { "type": "string" }
+							}
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Login bem-sucedido",
+						"schema": {
+							"type": "object",
+							"properties": {
+								"token": { "type": "string" }
+							}
+						}
+					},
+					"401": {
+						"description": "Credenciais inválidas"
+					}
+				}
+			}
+		},
+		"/register": {
+			"post": {
+				"tags": ["Usuários"],
+				"summary": "Registra um novo usuário",
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "Dados para registro",
+						"required": true,
+						"schema": {
+							"type": "object",
+							"properties": {
+								"name": { "type": "string" },
+								"email": { "type": "string" },
+								"password": { "type": "string" },
+								"role": { "type": "string", "enum": ["user", "admin"] }
+							}
+						}
+					}
+				],
+				"responses": {
+					"201": {
+						"description": "Usuário criado"
+					},
+					"403": {
+						"description": "Acesso proibido para usuários comuns"
+					}
+				}
+			}
+		},
+		"/users": {
+			"get": {
+				"tags": ["Usuários"],
+				"summary": "Lista os usuários ativos",
+				"security": [
+					{
+						"Bearer": []
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Retorna a lista de usuários ativos",
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"id": { "type": "integer" },
+									"email": { "type": "string" },
+									"role": { "type": "string" },
+									"isActive": { "type": "boolean" }
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Não autorizado"
+					}
+				}
+			}
+		}
+	},
+	"definitions": {},
+	"securityDefinitions": {
+		"Bearer": {
+			"type": "apiKey",
+			"name": "Authorization",
+			"in": "header",
+			"description": "Token JWT para autenticação (prefixo: 'Bearer ')"
+		}
+	}
+}
