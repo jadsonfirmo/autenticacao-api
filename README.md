@@ -1,6 +1,6 @@
 # autenticacao-api
 
-API de autenticação JWT com NestJS
+API de autenticação JWT com NodeJS
 
 Essa API tem o intuito apenas a realização de testes e estudos
 
